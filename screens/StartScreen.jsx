@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {View, TextInput, StyleSheet, Alert} from "react-native";
-import PrimaryButton from "../components/PrimaryButton";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import Title from "../components/ui/Title";
+import Colors from "../constants/colors";
 
 function StartScreen(props) {
 
@@ -23,29 +25,32 @@ function StartScreen(props) {
             )
             return
         }
-        props.startGame(userInput)
+        props.startGame(parseInt(userInput))
     }
 
     return (
-        <View style={styles.startContainer}>
-            <TextInput
-                style={styles.numberInput}
-                maxLength={2}
-                keyboardType={'number-pad'}
-                autoCapitalize={'none'}
-                autoCorrect={false}
-                value={userInput}
-                onChangeText={userInputHandler}
-            />
-            <View style={styles.buttonWrapper}>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={confirmInput}>Confirm</PrimaryButton>
+        <>
+            <Title text={'Pick a number'}/>
+            <View style={styles.startContainer}>
+                <TextInput
+                    style={styles.numberInput}
+                    maxLength={2}
+                    keyboardType={'number-pad'}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
+                    value={userInput}
+                    onChangeText={userInputHandler}
+                />
+                <View style={styles.buttonWrapper}>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={confirmInput}>Confirm</PrimaryButton>
+                    </View>
                 </View>
             </View>
-        </View>
+        </>
     );
 }
 
@@ -55,10 +60,9 @@ const styles = StyleSheet.create({
     startContainer: {
         alignItems: "center",
         marginTop: 20,
-        marginHorizontal: 24,
         borderRadius: 9,
         padding: 16,
-        backgroundColor: 'rgb(182,194,175)',
+        backgroundColor: Colors.primary,
         elevation: 4,
         shadowColor: 'black',
         shadowOffset: {width: 2, height: 2},
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
         width: 50,
         textAlign: 'center',
         fontSize: 32,
-        borderBottomColor: '#000000',
+        borderBottomColor: Colors.secondary,
         borderBottomWidth: 2,
         marginVertical: 10,
         fontWeight: 'bold',
