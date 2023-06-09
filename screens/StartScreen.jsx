@@ -23,6 +23,7 @@ function StartScreen(props) {
             )
             return
         }
+        props.startGame(userInput)
     }
 
     return (
