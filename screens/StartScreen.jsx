@@ -1,8 +1,30 @@
-import React from 'react';
-import {View, TextInput, StyleSheet} from "react-native";
+import React, {useState} from 'react';
+import {View, TextInput, StyleSheet, Alert} from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 
 function StartScreen(props) {
+
+    const [userInput, setUserInput] = useState('')
+
+    function userInputHandler(enteredText){
+        setUserInput(enteredText)
+    }
+
+    function resetInputHandler(){
+        setUserInput('')
+    }
+    function confirmInput(){
+        const chosenNum = parseInt(userInput)
+        if(isNaN(chosenNum) || chosenNum <= 0 || chosenNum > 99){
+            Alert.alert(
+                'Wrong Input',
+                'Must be a number in range 1-99',
+                [{text: 'Okay', style:'destructive', onPress: resetInputHandler}]
+            )
+            return
+        }
+    }
+
     return (
         <View style={styles.startContainer}>
             <TextInput
@@ -11,11 +33,16 @@ function StartScreen(props) {
                 keyboardType={'number-pad'}
                 autoCapitalize={'none'}
                 autoCorrect={false}
-
+                value={userInput}
+                onChangeText={userInputHandler}
             />
             <View style={styles.buttonWrapper}>
-                <PrimaryButton>Reset</PrimaryButton>
-                <PrimaryButton>Confirm</PrimaryButton>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton onPress={confirmInput}>Confirm</PrimaryButton>
+                </View>
             </View>
         </View>
     );
@@ -25,6 +52,7 @@ export default StartScreen;
 
 const styles = StyleSheet.create({
     startContainer: {
+        alignItems: "center",
         marginTop: 20,
         marginHorizontal: 24,
         borderRadius: 9,
@@ -48,5 +76,10 @@ const styles = StyleSheet.create({
     },
     buttonWrapper:{
         gap: 10,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+    buttonContainer: {
+        flex: 1,
     }
 })
