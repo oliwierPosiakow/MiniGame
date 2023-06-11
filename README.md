@@ -7,7 +7,7 @@ A React Native project which uses expo as a platform for development along with 
 
 
 ## Demo
-<img src="https://github.com/oliwierPosiakow/MiniGame/blob/master/assets/images/demo.gif" width="250" height="400" />
+<img src="https://github.com/oliwierPosiakow/MiniGame/blob/master/assets/images/demo.gif" width="250" height="500" />
 
 ## Features
 
