@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
     buttonText: {
+        fontFamily: 'open-sans',
         color: Colors.text,
-        fontWeight: 'bold',
         fontSize: 16,
         textAlign: "center",
     },

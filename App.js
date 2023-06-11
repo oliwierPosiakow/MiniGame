@@ -1,5 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import {SafeAreaView, StyleSheet, ImageBackground, View} from 'react-native';
+import {useFonts} from "expo-font";
+import AppLoading from 'expo-app-loading'
 
 import StartScreen from "./screens/StartScreen";
 import GameScreen from "./screens/GameScreen";
@@ -12,14 +14,29 @@ export default function App() {
 
     const [userNum, setUserNum] = useState()
     const [gameIsOver, setGameIsOver] = useState(true)
+    const [rounds, setRounds] = useState(0)
 
+    const [fontsLoaded] = useFonts({
+        'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+        'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+    })
+
+    if(!fontsLoaded){
+        return <AppLoading/>
+    }
     function pickedNumHandler(pickedNum){
         setUserNum(pickedNum)
         setGameIsOver(false)
     }
 
-    function gameOverHandler(){
+    function gameOverHandler(numOfRounds){
         setGameIsOver(true)
+        setRounds(numOfRounds)
+    }
+
+    function startNewGame(){
+        setUserNum(null)
+        setRounds(0)
     }
 
     let screen = <StartScreen startGame={pickedNumHandler}/>
@@ -31,7 +48,7 @@ export default function App() {
     }
 
     if(gameIsOver && userNum) {
-        screen = <GameOverScreen/>
+        screen = <GameOverScreen userNum={userNum} rounds={rounds} startNewGame={startNewGame}/>
     }
 
     return (

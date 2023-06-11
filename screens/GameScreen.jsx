@@ -1,10 +1,14 @@
-import {View, Text, StyleSheet, Alert} from 'react-native'
+import {View, Text, StyleSheet, Alert, FlatList} from 'react-native'
+import {useEffect, useState} from "react";
+import {AntDesign} from  '@expo/vector-icons'
+
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from '../components/ui/Title'
 import Card from "../components/ui/Card";
 import NumberContainer from "../components/game/NumberContainer";
-import {useEffect, useState} from "react";
 import Instruction from "../components/ui/Instruction";
+import Colors from "../constants/colors";
+import GuessLogItem from "../components/game/GuessLogItem";
 
 function generateRandomBetween(min, max, exclude) {
     const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -26,12 +30,20 @@ function GameScreen({userNum, onGameOver}) {
         userNum
     );
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    const [guess, setGuess] = useState([initialGuess])
+
+    const guessRoundsLength = guess.length
 
     useEffect(() => {
         if (currentGuess === userNum) {
-            onGameOver();
+            onGameOver(guessRoundsLength);
         }
     }, [currentGuess, userNum, onGameOver]);
+
+    useEffect(()=> {
+        minBoundary = 1
+        maxBoundary = 100
+    },[])
 
     function nextGuess(direction) {
         // direction => 'lower', 'greater'
@@ -59,6 +71,7 @@ function GameScreen({userNum, onGameOver}) {
             currentGuess
         );
         setCurrentGuess(newRndNumber);
+        setGuess(prevGuess => [newRndNumber, ...prevGuess])
     }
     return (
         <View style={styles.gameContainer}>
@@ -68,13 +81,26 @@ function GameScreen({userNum, onGameOver}) {
                 <Instruction>Higher or Lower?</Instruction>
                 <View style={styles.buttonsWrapper}>
                     <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={nextGuess.bind(this, 'lower')}>Lower</PrimaryButton>
+                        <PrimaryButton onPress={nextGuess.bind(this, 'lower')}>
+                            <AntDesign name="down" size={24} color={Colors.text} />
+                        </PrimaryButton>
                     </View>
                     <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={nextGuess.bind(this, 'higher')}>Higher</PrimaryButton>
+                        <PrimaryButton onPress={nextGuess.bind(this, 'higher')}>
+                            <AntDesign name="up" size={24} color={Colors.text} />
+                        </PrimaryButton>
                     </View>
                 </View>
             </Card>
+            <View>
+                <FlatList
+                    data={guess}
+                    renderItem={({item, index})=> {
+                        return <GuessLogItem roundNum={guessRoundsLength - index} guess={item}/>
+                    }}
+                    keyExtractor={(item) => item}
+                />
+            </View>
         </View>
     );
 }
