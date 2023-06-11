@@ -1,8 +1,10 @@
 import {View, Text, StyleSheet, Alert} from 'react-native'
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from '../components/ui/Title'
+import Card from "../components/ui/Card";
 import NumberContainer from "../components/game/NumberContainer";
 import {useEffect, useState} from "react";
+import Instruction from "../components/ui/Instruction";
 
 function generateRandomBetween(min, max, exclude) {
     const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -29,18 +31,19 @@ function GameScreen({userNum, onGameOver}) {
         if (currentGuess === userNum) {
             onGameOver();
         }
-        console.log('effect ran', currentGuess, userNum)
     }, [currentGuess, userNum, onGameOver]);
 
     function nextGuess(direction) {
         // direction => 'lower', 'greater'
         if (
             (direction === 'lower' && currentGuess < userNum) ||
-            (direction === 'greater' && currentGuess > userNum)
+            (direction === 'higher' && currentGuess > userNum)
         ) {
-            Alert.alert("Don't lie!", 'You know that this is wrong...', [
-                { text: 'Sorry!', style: 'cancel' },
-            ]);
+            Alert.alert(
+                "Don't lie!",
+                'Play along rules...',
+                [{ text: 'Sorry!', style: 'cancel' }]
+            );
             return;
         }
 
@@ -58,11 +61,11 @@ function GameScreen({userNum, onGameOver}) {
         setCurrentGuess(newRndNumber);
     }
     return (
-        <View>
+        <View style={styles.gameContainer}>
             <Title text={"Opponent's turn"}/>
             <NumberContainer text={currentGuess}/>
-            <View>
-                <Text>Higher or Lower?</Text>
+            <Card>
+                <Instruction>Higher or Lower?</Instruction>
                 <View style={styles.buttonsWrapper}>
                     <View style={styles.buttonContainer}>
                         <PrimaryButton onPress={nextGuess.bind(this, 'lower')}>Lower</PrimaryButton>
@@ -71,7 +74,7 @@ function GameScreen({userNum, onGameOver}) {
                         <PrimaryButton onPress={nextGuess.bind(this, 'higher')}>Higher</PrimaryButton>
                     </View>
                 </View>
-            </View>
+            </Card>
         </View>
     );
 }
@@ -79,6 +82,9 @@ function GameScreen({userNum, onGameOver}) {
 export default GameScreen;
 
 const styles = StyleSheet.create({
+    gameContainer:{
+        gap: 20,
+    },
     buttonsWrapper:{
         flexDirection: "row",
         gap: 16,
@@ -86,6 +92,4 @@ const styles = StyleSheet.create({
     buttonContainer:{
         flex: 1,
     },
-
-
 })

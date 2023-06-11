@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, TextInput, StyleSheet, Alert} from "react-native";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from "../components/ui/Title";
+import Card from '../components/ui/Card'
 import Colors from "../constants/colors";
 
 function StartScreen(props) {
@@ -29,9 +30,9 @@ function StartScreen(props) {
     }
 
     return (
-        <>
+        <View style={styles.startContainer}>
             <Title text={'Pick a number'}/>
-            <View style={styles.startContainer}>
+            <Card>
                 <TextInput
                     style={styles.numberInput}
                     maxLength={2}
@@ -40,6 +41,7 @@ function StartScreen(props) {
                     autoCorrect={false}
                     value={userInput}
                     onChangeText={userInputHandler}
+                    placeholder={'21'}
                 />
                 <View style={styles.buttonWrapper}>
                     <View style={styles.buttonContainer}>
@@ -49,25 +51,16 @@ function StartScreen(props) {
                         <PrimaryButton onPress={confirmInput}>Confirm</PrimaryButton>
                     </View>
                 </View>
-            </View>
-        </>
+            </Card>
+        </View>
     );
 }
 
 export default StartScreen;
 
 const styles = StyleSheet.create({
-    startContainer: {
-        alignItems: "center",
-        marginTop: 20,
-        borderRadius: 9,
-        padding: 16,
-        backgroundColor: Colors.primary,
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: {width: 2, height: 2},
-        shadowRadius: 2,
-        shadowOpacity: .15,
+    startContainer:{
+        gap: 20,
     },
     numberInput: {
         height: 50,
