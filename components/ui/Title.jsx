@@ -11,8 +11,6 @@ function Title({text}) {
 
 export default Title;
 
-
-
 const styles = StyleSheet.create({
     title: {
         fontFamily: 'open-sans-bold',
