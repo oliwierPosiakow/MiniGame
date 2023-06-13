@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Alert, FlatList} from 'react-native'
+import {View, Text, StyleSheet, Alert, FlatList, useWindowDimensions} from 'react-native'
 import {useEffect, useState} from "react";
 import {AntDesign} from  '@expo/vector-icons'
 
@@ -29,6 +29,8 @@ function GameScreen({userNum, onGameOver}) {
         100,
         userNum
     );
+
+    const {width, height} = useWindowDimensions()
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [guess, setGuess] = useState([initialGuess])
 
@@ -73,9 +75,9 @@ function GameScreen({userNum, onGameOver}) {
         setCurrentGuess(newRndNumber);
         setGuess(prevGuess => [newRndNumber, ...prevGuess])
     }
-    return (
-        <View style={styles.gameContainer}>
-            <Title text={"Opponent's turn"}/>
+
+    let content = (
+        <>
             <NumberContainer text={currentGuess}/>
             <Card>
                 <Instruction>Higher or Lower?</Instruction>
@@ -92,15 +94,44 @@ function GameScreen({userNum, onGameOver}) {
                     </View>
                 </View>
             </Card>
-            <View>
-                <FlatList
-                    data={guess}
-                    renderItem={({item, index})=> {
-                        return <GuessLogItem roundNum={guessRoundsLength - index} guess={item}/>
-                    }}
-                    keyExtractor={(item) => item}
-                />
-            </View>
+        </>
+    )
+
+    if(width > 600){
+        content = (
+            <>
+                <View style={styles.buttonsHorizontal}>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={nextGuess.bind(this, 'higher')}>
+                            <AntDesign name="up" size={24} color={Colors.text} />
+                        </PrimaryButton>
+                    </View>
+
+                    <NumberContainer text={currentGuess}/>
+
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={nextGuess.bind(this, 'lower')}>
+                            <AntDesign name="down" size={24} color={Colors.text} />
+                        </PrimaryButton>
+                    </View>
+                </View>
+            </>
+        )
+    }
+
+    return (
+        <View style={styles.gameContainer}>
+            <Title text={"Opponent's turn"}/>
+            {content}
+                <View>
+                    <FlatList
+                        data={guess}
+                        renderItem={({item, index})=> {
+                            return <GuessLogItem roundNum={guessRoundsLength - index} guess={item}/>
+                        }}
+                        keyExtractor={(item) => item}
+                    />
+                </View>
         </View>
     );
 }
@@ -118,4 +149,9 @@ const styles = StyleSheet.create({
     buttonContainer:{
         flex: 1,
     },
+    buttonsHorizontal:{
+        flexDirection: 'row',
+        gap: 16,
+        alignItems: "center"
+    }
 })
